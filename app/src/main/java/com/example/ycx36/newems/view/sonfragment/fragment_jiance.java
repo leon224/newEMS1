@@ -7,21 +7,16 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-
 import com.example.ycx36.newems.R;
 import com.example.ycx36.newems.util.getCarInfo;
-import com.example.ycx36.newems.view.activity.ExaminationActivity;
 import com.example.ycx36.newems.view.activity.activity_CurrentInformation;
 import com.github.lzyzsd.circleprogress.CircleProgress;
-
 
 import java.util.Objects;
 
@@ -310,10 +305,10 @@ public class fragment_jiance extends Fragment {
         }
         String Unittemid = Objects.requireNonNull(getActivity()).getSharedPreferences("UNITTEMID",MODE_PRIVATE).getString("Unittemid","");
         if (!Unittemid.equals("")){
-            if (Double.parseDouble(Unittemid) >250 || Double.parseDouble(Unittemid) < 0){
+//            if (Double.parseDouble(Unittemid) >250 || Double.parseDouble(Unittemid) < 0){
                 //最高单体温度探针序号
                 flag_ifSafety_BMS = 1;
-            }
+//            }
         }else {
             flag_ifSafety_BMS = 1;
         }

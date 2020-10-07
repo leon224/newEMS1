@@ -1,6 +1,6 @@
 package com.example.ycx36.newems.util;
 
-public class requestRegisterUserBean {
+public class  requestRegisterUserBean {
 
     private RequestBean request;
 

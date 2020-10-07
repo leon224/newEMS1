@@ -3,9 +3,6 @@ package com.example.ycx36.newems.util;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
-import android.widget.Toast;
-
-import java.util.Objects;
 
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
@@ -29,7 +26,7 @@ public class getCarInfo implements interface_getCarAllData {
         requestGetCarAll.setRequest(new requestGetCarAllBean.RequestBean());
         requestGetCarAll.getRequest().setCommon(new requestGetCarAllBean.RequestBean.CommonBean());
         requestGetCarAll.getRequest().getCommon().setAction("getCarAll");      //设置第一参数 "action":"getCarAll"
-        requestGetCarAll.getRequest().getCommon().setReqtime("20190326171001");    //设置第二参数 "reqtime":"20190325180230"
+        requestGetCarAll.getRequest().getCommon().setReqtime("20190325180230");    //设置第二参数 "reqtime":"20190325180230"
 
         requestGetCarAll.getRequest().setContent(new requestGetCarAllBean.RequestBean.ContentBean());
         requestGetCarAll.getRequest().getContent().setId(null);      //设置id
