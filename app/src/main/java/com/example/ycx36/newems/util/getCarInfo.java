@@ -35,7 +35,7 @@ public class getCarInfo implements interface_getCarAllData {
         requestGetCarAll.getRequest().getContent().setPhone("");    //设置手机号
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://120.79.62.86:10003/")
+                .baseUrl("http://101.132.137.176:10003/")
                 .addConverterFactory(GsonConverterFactory.create())//设置 Json 转换器
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())//RxJava 适配器
                 .build();

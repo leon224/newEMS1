@@ -7,13 +7,13 @@ import rx.Observable;
 
 public interface interface_retrofit {
 
-    //查历史数据  http://120.79.62.86:10003/getCarAllList
+    //查历史数据  http://101.132.137.176:10003/getCarAllList
     @POST("/getCarAllList")
     Observable<getCarAllListBean> getCarAllList(
             @Body requestGetCarAllListBean requestGetCarAlListBean
     );
 
-    //查车况  http://120.79.62.86:10003/getCarAll
+    //查车况  http://101.132.137.176:10003/getCarAll
     @POST("/getCarAll")
     Observable<getCarAllBean> getCarAll(
             @Body requestGetCarAllBean requestGetCarAllBean

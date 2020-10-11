@@ -1,19 +1,14 @@
 package com.example.ycx36.newems.view.activity;
 
-import android.content.SharedPreferences;
-import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-
 import com.example.ycx36.newems.R;
 import com.example.ycx36.newems.util.interface_retrofit;
 import com.example.ycx36.newems.util.regesterUserBean;
-import com.example.ycx36.newems.util.registerBean;
 import com.example.ycx36.newems.util.requestRegisterUserBean;
 
 import butterknife.BindView;
@@ -22,7 +17,6 @@ import butterknife.OnClick;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
-import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
@@ -68,7 +62,7 @@ public class activity_Register extends AppCompatActivity {
         Retrofit retrofit2 = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())  //Gson解析器
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .baseUrl("http://120.79.62.86:10003/")  //数据接口的主地址
+                .baseUrl("http://101.132.137.176:10003/")  //数据接口的主地址
                 .build();
         interface_retrofit rinterface = retrofit2.create(interface_retrofit.class);
         rinterface.regesterUser(registerUser)  //请求参数

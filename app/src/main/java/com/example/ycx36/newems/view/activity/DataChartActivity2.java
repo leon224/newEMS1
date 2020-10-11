@@ -1,4 +1,5 @@
 package com.example.ycx36.newems.view.activity;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -30,7 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-        public class DataChartActivity2 extends AppCompatActivity implements View.OnClickListener {
+public class DataChartActivity2 extends AppCompatActivity implements View.OnClickListener {
         com.example.ycx36.newems.util.getCarAllList getCarAllList;
         adapter_CurrentInfo adapter;
         String username;
@@ -43,11 +44,20 @@ import java.util.Random;
         public static final int LINE_NUMBER_2 = 1;
         public static final int LINE_NUMBER_3 = 2;
 
+        private String motorspeed = "";
+        private String motortorque = "";
+        private String totalcurrent = "";
+        private String totalvoltage = "";
+        private String motortinitdata = "";
+        private String motorvm = "";
+        private String motoram = "";
+        private String motortem = "";
+
         /**
          * 功能：启动方式
          */
         public static void startActivity(Context context) {
-        context.startActivity(new Intent(context, DataChartActivity2.class));
+                context.startActivity(new Intent(context, DataChartActivity2.class));
         }
 
 
@@ -88,68 +98,61 @@ import java.util.Random;
 
 
         @Override
-        protected   void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_data_chart2);
-        SharedPreferences pref = getSharedPreferences("username", MODE_PRIVATE);
-        username =  pref.getString("username", "");
-        SharedPreferences pref2 = getSharedPreferences("password", MODE_PRIVATE);
-        password = pref2.getString("password", "");
+        protected void onCreate(Bundle savedInstanceState) {
+                super.onCreate(savedInstanceState);
+                setContentView(R.layout.activity_data_chart2);
+                //初始化数据
+                initdata_MCU();
+                SharedPreferences pref = getSharedPreferences("username", MODE_PRIVATE);
+                username = pref.getString("username", "");
+                SharedPreferences pref2 = getSharedPreferences("password", MODE_PRIVATE);
+                password = pref2.getString("password", "");
 
-        getCarAllList = new getCarAllList(this);
-        Bundle bundle = this.getIntent().getExtras();    //bundle取出之前存在intent的数据
+                getCarAllList = new getCarAllList(this);
+                Bundle bundle = this.getIntent().getExtras();    //bundle取出之前存在intent的数据
                 assert bundle != null;
-        mDemoHandler = new DemoHandler(this);
-        initView();
-        initLineChart();
+                mDemoHandler = new DemoHandler(this);
+                initView();
+                initLineChart();
         }
 
-        public  void initdata_MCU(){
-                String motorspeed = getSharedPreferences("MOTORSPEED",MODE_PRIVATE).getString("motorspeed","");
-                String motortorque = getSharedPreferences("MOTOTTORQUE",MODE_PRIVATE).getString("motortorque","");
-                String totalcurrent = getSharedPreferences("TOTALCURRENT",MODE_PRIVATE).getString("totalcurrent","");
-                String totalvoltage = getSharedPreferences("TOTALVOLTAGE",MODE_PRIVATE).getString("totalvoltage","");
-                String motortinitdata = getSharedPreferences("MOTORTEM",MODE_PRIVATE).getString("motortem","");
-                String motorvm = getSharedPreferences("MOTORVM",MODE_PRIVATE).getString("motorvm","");
-                String motoram = getSharedPreferences("MOTORAM",MODE_PRIVATE).getString("motoram","");
-
-
-
-
+        public void initdata_MCU() {
+                motorspeed = getSharedPreferences("MOTORSPEED", MODE_PRIVATE).getString("motorspeed", "");
+                motortorque = getSharedPreferences("MOTOTTORQUE", MODE_PRIVATE).getString("motortorque", "");
+                totalcurrent = getSharedPreferences("TOTALCURRENT", MODE_PRIVATE).getString("totalcurrent", "");
+                totalvoltage = getSharedPreferences("TOTALVOLTAGE", MODE_PRIVATE).getString("totalvoltage", "");
+                motortinitdata = getSharedPreferences("MOTORTEM", MODE_PRIVATE).getString("motortem", "");
+                motorvm = getSharedPreferences("MOTORVM", MODE_PRIVATE).getString("motorvm", "");
+                motoram = getSharedPreferences("MOTORAM", MODE_PRIVATE).getString("motoram", "");
+                motortem = getSharedPreferences("MOTORTEM", MODE_PRIVATE).getString("motortem", "");
         }
-
-
-
-
-
-
 
 
         /**
          * 功能：产生随机数（小数点两位）
          */
         public Float getRandom(Float seed) {
-        return Float.valueOf(mDecimalFormat.format(mRandom.nextFloat() * seed));
+                return Float.valueOf(mDecimalFormat.format(mRandom.nextFloat() * seed));
         }
 
         /**
          * 功能：初始化基本控件，button，checkbox
          */
         public void initView() {
-        mBtnStart = findViewById(R.id.demo_start);
-        mBtnPause = findViewById(R.id.demo_pause);
-        mCheckBox1 = findViewById(R.id.demo_checkbox1);
-        mCheckBox2 = findViewById(R.id.demo_checkbox2);
-        mCheckBox3 = findViewById(R.id.demo_checkbox3);
-        mCheckBoxList.add(mCheckBox1);
-        mCheckBoxList.add(mCheckBox2);
-        mCheckBoxList.add(mCheckBox3);
+                mBtnStart = findViewById(R.id.demo_start);
+                mBtnPause = findViewById(R.id.demo_pause);
+                mCheckBox1 = findViewById(R.id.demo_checkbox1);
+                mCheckBox2 = findViewById(R.id.demo_checkbox2);
+                mCheckBox3 = findViewById(R.id.demo_checkbox3);
+                mCheckBoxList.add(mCheckBox1);
+                mCheckBoxList.add(mCheckBox2);
+                mCheckBoxList.add(mCheckBox3);
 
-        mBtnStart.setOnClickListener(this);
-        mBtnPause.setOnClickListener(this);
-        mCheckBox1.setOnClickListener(this);
-        mCheckBox2.setOnClickListener(this);
-        mCheckBox3.setOnClickListener(this);
+                mBtnStart.setOnClickListener(this);
+                mBtnPause.setOnClickListener(this);
+                mCheckBox1.setOnClickListener(this);
+                mCheckBox2.setOnClickListener(this);
+                mCheckBox3.setOnClickListener(this);
 
         }
 
@@ -157,28 +160,28 @@ import java.util.Random;
          * 功能：初始化LineChart
          */
         public void initLineChart() {
-        mLineChart = findViewById(R.id.demo_linechart);
-        mXAxis = mLineChart.getXAxis(); // 得到x轴
-        mLeftYAxis = mLineChart.getAxisLeft(); // 得到侧Y轴
-        mRightYAxis = mLineChart.getAxisRight(); // 得到右侧Y轴
-        mLegend = mLineChart.getLegend(); // 得到图例
-        mLineData = new LineData();
-        mLineChart.setData(mLineData);
+                mLineChart = findViewById(R.id.demo_linechart);
+                mXAxis = mLineChart.getXAxis(); // 得到x轴
+                mLeftYAxis = mLineChart.getAxisLeft(); // 得到侧Y轴
+                mRightYAxis = mLineChart.getAxisRight(); // 得到右侧Y轴
+                mLegend = mLineChart.getLegend(); // 得到图例
+                mLineData = new LineData();
+                mLineChart.setData(mLineData);
 
-        // 设置图标基本属性
-        setChartBasicAttr(mLineChart);
+                // 设置图标基本属性
+                setChartBasicAttr(mLineChart);
 
-        // 设置XY轴
-        setXYAxis(mLineChart, mXAxis, mLeftYAxis, mRightYAxis);
+                // 设置XY轴
+                setXYAxis(mLineChart, mXAxis, mLeftYAxis, mRightYAxis);
 
-        // 添加线条
-        initLine();
+                // 添加线条
+                initLine();
 
-        // 设置图例
-        createLegend(mLegend);
+                // 设置图例
+                createLegend(mLegend);
 
-        // 设置MarkerView
-        setMarkerView(mLineChart);
+                // 设置MarkerView
+                setMarkerView(mLineChart);
         }
 
 
@@ -186,39 +189,39 @@ import java.util.Random;
          * 功能：设置图标的基本属性
          */
         void setChartBasicAttr(LineChart lineChart) {
-        /***图表设置***/
-        lineChart.setDrawGridBackground(false); //是否展示网格线
-        lineChart.setDrawBorders(true); //是否显示边界
-        lineChart.setDragEnabled(true); //是否可以拖动
-        lineChart.setScaleEnabled(true); // 是否可以缩放
-        lineChart.setTouchEnabled(true); //是否有触摸事件
-        //设置XY轴动画效果
-        //lineChart.animateY(2500);
-        lineChart.animateX(1500);
+                /***图表设置***/
+                lineChart.setDrawGridBackground(false); //是否展示网格线
+                lineChart.setDrawBorders(true); //是否显示边界
+                lineChart.setDragEnabled(true); //是否可以拖动
+                lineChart.setScaleEnabled(true); // 是否可以缩放
+                lineChart.setTouchEnabled(true); //是否有触摸事件
+                //设置XY轴动画效果
+                //lineChart.animateY(2500);
+                lineChart.animateX(1500);
         }
 
         /**
          * 功能：设置XY轴
          */
         void setXYAxis(LineChart lineChart, XAxis xAxis, YAxis leftYAxis, YAxis rightYAxis) {
-        /***XY轴的设置***/
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM); //X轴设置显示位置在底部
-        xAxis.setAxisMinimum(0f); // 设置X轴的最小值
-        xAxis.setAxisMaximum(20); // 设置X轴的最大值
-        xAxis.setLabelCount(20, false); // 设置X轴的刻度数量，第二个参数表示是否平均分配
-        xAxis.setGranularity(1f); // 设置X轴坐标之间的最小间隔
-        lineChart.setVisibleXRangeMaximum(5);// 当前统计图表中最多在x轴坐标线上显示的总量
-        //保证Y轴从0开始，不然会上移一点
-        leftYAxis.setAxisMinimum(0f);
-        rightYAxis.setAxisMinimum(0f);
-        leftYAxis.setAxisMaximum(100f);
-        rightYAxis.setAxisMaximum(100f);
-        leftYAxis.setGranularity(1f);
-        rightYAxis.setGranularity(1f);
-        leftYAxis.setLabelCount(20);
-        lineChart.setVisibleYRangeMaximum(50, YAxis.AxisDependency.LEFT);// 当前统计图表中最多在Y轴坐标线上显示的总量
-        lineChart.setVisibleYRangeMaximum(50, YAxis.AxisDependency.RIGHT);// 当前统计图表中最多在Y轴坐标线上显示的总量
-        leftYAxis.setEnabled(false);
+                /***XY轴的设置***/
+                xAxis.setPosition(XAxis.XAxisPosition.BOTTOM); //X轴设置显示位置在底部
+                xAxis.setAxisMinimum(0f); // 设置X轴的最小值
+                xAxis.setAxisMaximum(20); // 设置X轴的最大值
+                xAxis.setLabelCount(20, false); // 设置X轴的刻度数量，第二个参数表示是否平均分配
+                xAxis.setGranularity(1f); // 设置X轴坐标之间的最小间隔
+                lineChart.setVisibleXRangeMaximum(5);// 当前统计图表中最多在x轴坐标线上显示的总量
+                //保证Y轴从0开始，不然会上移一点
+                leftYAxis.setAxisMinimum(0f);
+                rightYAxis.setAxisMinimum(0f);
+                leftYAxis.setAxisMaximum(100f);
+                rightYAxis.setAxisMaximum(100f);
+                leftYAxis.setGranularity(1f);
+                rightYAxis.setGranularity(1f);
+                leftYAxis.setLabelCount(20);
+                lineChart.setVisibleYRangeMaximum(50, YAxis.AxisDependency.LEFT);// 当前统计图表中最多在Y轴坐标线上显示的总量
+                lineChart.setVisibleYRangeMaximum(50, YAxis.AxisDependency.RIGHT);// 当前统计图表中最多在Y轴坐标线上显示的总量
+                leftYAxis.setEnabled(false);
 
 //        leftYAxis.setCenterAxisLabels(true);// 将轴标记居中
 //        leftYAxis.setDrawZeroLine(true); // 原点处绘制 一条线
@@ -231,58 +234,58 @@ import java.util.Random;
          */
         void initLine() {
 
-        createLine(mList1, mEntries1, mLineDataSet1,  getResources().getColor(R.color.black), mLineData,mLineChart);
-        createLine(mList2, mEntries2, mLineDataSet2, getResources().getColor(R.color.green), mLineData, mLineChart);
-        createLine(mList3, mEntries3, mLineDataSet3,getResources().getColor(R.color.red), mLineData, mLineChart);
+                createLine(mList1, mEntries1, mLineDataSet1, getResources().getColor(R.color.black), mLineData, mLineChart);
+                createLine(mList2, mEntries2, mLineDataSet2, getResources().getColor(R.color.green), mLineData, mLineChart);
+                createLine(mList3, mEntries3, mLineDataSet3, getResources().getColor(R.color.red), mLineData, mLineChart);
 
 
-        // mLineData.getDataSetCount() 总线条数
-        // mLineData.getEntryCount() 总点数
-        // mLineData.getDataSetByIndex(index).getEntryCount() 索引index处折线的总点数
-        // 每条曲线添加到mLineData后，从索引0处开始排列
-        for (int i = 0; i < mLineData.getDataSetCount(); i++) {
-        mLineChart.getLineData().getDataSets().get(i).setVisible(false); //
-        }
-        showLine(LINE_NUMBER_1);
+                // mLineData.getDataSetCount() 总线条数
+                // mLineData.getEntryCount() 总点数
+                // mLineData.getDataSetByIndex(index).getEntryCount() 索引index处折线的总点数
+                // 每条曲线添加到mLineData后，从索引0处开始排列
+                for (int i = 0; i < mLineData.getDataSetCount(); i++) {
+                        mLineChart.getLineData().getDataSets().get(i).setVisible(false); //
+                }
+                showLine(LINE_NUMBER_1);
         }
 
         /**
          * 功能：根据索引显示或隐藏指定线条
          */
         public void showLine(int index) {
-        mLineChart
-        .getLineData()
-        .getDataSets()
-        .get(index)
-        .setVisible(mCheckBoxList.get(index).isChecked());
-        mLineChart.invalidate();
+                mLineChart
+                        .getLineData()
+                        .getDataSets()
+                        .get(index)
+                        .setVisible(mCheckBoxList.get(index).isChecked());
+                mLineChart.invalidate();
         }
 
         /**
          * 功能：动态创建一条曲线
          */
         private void createLine(List<Float> dataList, List<Entry> entries, LineDataSet lineDataSet, int color, LineData lineData, LineChart lineChart) {
-        for (int i = 0; i < dataList.size(); i++) {
-        /**
-         * 在此可查看 Entry构造方法，可发现 可传入数值 Entry(float x, float y)
-         * 也可传入Drawable， Entry(float x, float y, Drawable icon) 可在XY轴交点 设置Drawable图像展示
-         */
-        Entry entry = new Entry(i, dataList.get(i));// Entry(x,y)
-        entries.add(entry);
-        }
+                for (int i = 0; i < dataList.size(); i++) {
+                        /**
+                         * 在此可查看 Entry构造方法，可发现 可传入数值 Entry(float x, float y)
+                         * 也可传入Drawable， Entry(float x, float y, Drawable icon) 可在XY轴交点 设置Drawable图像展示
+                         */
+                        Entry entry = new Entry(i, dataList.get(i));// Entry(x,y)
+                        entries.add(entry);
+                }
 
-        // 初始化线条
-        initLineDataSet(lineDataSet, color, LineDataSet.Mode.CUBIC_BEZIER);
+                // 初始化线条
+                initLineDataSet(lineDataSet, color, LineDataSet.Mode.CUBIC_BEZIER);
 
-        if (lineData == null) {
-        lineData = new LineData();
-        lineData.addDataSet(lineDataSet);
-        lineChart.setData(lineData);
-        } else {
-        lineChart.getLineData().addDataSet(lineDataSet);
-        }
+                if (lineData == null) {
+                        lineData = new LineData();
+                        lineData.addDataSet(lineDataSet);
+                        lineChart.setData(lineData);
+                } else {
+                        lineChart.getLineData().addDataSet(lineDataSet);
+                }
 
-        lineChart.invalidate();
+                lineChart.invalidate();
         }
 
 
@@ -294,22 +297,22 @@ import java.util.Random;
          * @param mode
          */
         private void initLineDataSet(LineDataSet lineDataSet, int color, LineDataSet.Mode mode) {
-        lineDataSet.setColor(color); // 设置曲线颜色
-        lineDataSet.setCircleColor(color);  // 设置数据点圆形的颜色
-        lineDataSet.setDrawCircleHole(false);// 设置曲线值的圆点是否是空心
-        lineDataSet.setLineWidth(1f); // 设置折线宽度
-        lineDataSet.setCircleRadius(3f); // 设置折现点圆点半径
-        lineDataSet.setValueTextSize(10f);
+                lineDataSet.setColor(color); // 设置曲线颜色
+                lineDataSet.setCircleColor(color);  // 设置数据点圆形的颜色
+                lineDataSet.setDrawCircleHole(false);// 设置曲线值的圆点是否是空心
+                lineDataSet.setLineWidth(1f); // 设置折线宽度
+                lineDataSet.setCircleRadius(3f); // 设置折现点圆点半径
+                lineDataSet.setValueTextSize(10f);
 
-        lineDataSet.setDrawFilled(true); //设置折线图填充
-        lineDataSet.setFormLineWidth(1f);
-        lineDataSet.setFormSize(15.f);
-        if (mode == null) {
-        //设置曲线展示为圆滑曲线（如果不设置则默认折线）
-        lineDataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
-        } else {
-        lineDataSet.setMode(mode);
-        }
+                lineDataSet.setDrawFilled(true); //设置折线图填充
+                lineDataSet.setFormLineWidth(1f);
+                lineDataSet.setFormSize(15.f);
+                if (mode == null) {
+                        //设置曲线展示为圆滑曲线（如果不设置则默认折线）
+                        lineDataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+                } else {
+                        lineDataSet.setMode(mode);
+                }
 
         }
 
@@ -318,17 +321,17 @@ import java.util.Random;
          * 功能：创建图例
          */
         private void createLegend(Legend legend) {
-        /***折线图例 标签 设置***/
-        //设置显示类型，LINE CIRCLE SQUARE EMPTY 等等 多种方式，查看LegendForm 即可
-        legend.setForm(Legend.LegendForm.CIRCLE);
-        legend.setTextSize(12f);
-        //显示位置 左下方
-        legend.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
-        legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.LEFT);
-        legend.setOrientation(Legend.LegendOrientation.HORIZONTAL);
-        //是否绘制在图表里面
-        legend.setDrawInside(false);
-        legend.setEnabled(true);
+                /***折线图例 标签 设置***/
+                //设置显示类型，LINE CIRCLE SQUARE EMPTY 等等 多种方式，查看LegendForm 即可
+                legend.setForm(Legend.LegendForm.CIRCLE);
+                legend.setTextSize(12f);
+                //显示位置 左下方
+                legend.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
+                legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.LEFT);
+                legend.setOrientation(Legend.LegendOrientation.HORIZONTAL);
+                //是否绘制在图表里面
+                legend.setDrawInside(false);
+                legend.setEnabled(true);
         }
 
 
@@ -336,10 +339,10 @@ import java.util.Random;
          * 设置 可以显示X Y 轴自定义值的 MarkerView
          */
         public void setMarkerView(LineChart lineChart) {
-        MarkViewDemo mv = new MarkViewDemo(this);
-        mv.setChartView(lineChart);
-        lineChart.setMarker(mv);
-        lineChart.invalidate();
+                MarkViewDemo mv = new MarkViewDemo(this);
+                mv.setChartView(lineChart);
+                lineChart.setMarker(mv);
+                lineChart.invalidate();
         }
 
 
@@ -351,20 +354,20 @@ import java.util.Random;
          */
         public void addEntry(LineData lineData, LineChart lineChart, float yValues, int index) {
 
-        // 通过索引得到一条折线，之后得到折线上当前点的数量
-        int xCount = lineData.getDataSetByIndex(index).getEntryCount();
+                // 通过索引得到一条折线，之后得到折线上当前点的数量
+                int xCount = lineData.getDataSetByIndex(index).getEntryCount();
 
 
-        Entry entry = new Entry(xCount, yValues); // 创建一个点
-        lineData.addEntry(entry, index); // 将entry添加到指定索引处的折线中
+                Entry entry = new Entry(xCount, yValues); // 创建一个点
+                lineData.addEntry(entry, index); // 将entry添加到指定索引处的折线中
 
-        //通知数据已经改变
-        lineData.notifyDataChanged();
-        lineChart.notifyDataSetChanged();
+                //通知数据已经改变
+                lineData.notifyDataChanged();
+                lineChart.notifyDataSetChanged();
 
-        //把yValues移到指定索引的位置
-        lineChart.moveViewToAnimated(xCount - 4, yValues, YAxis.AxisDependency.LEFT, 1000);// TODO: 2019/5/4 内存泄漏，异步 待修复
-        lineChart.invalidate();
+                //把yValues移到指定索引的位置
+                lineChart.moveViewToAnimated(xCount - 4, yValues, YAxis.AxisDependency.LEFT, 1000);// TODO: 2019/5/4 内存泄漏，异步 待修复
+                lineChart.invalidate();
         }
 
 
@@ -373,108 +376,114 @@ import java.util.Random;
          */
 
         public void addLine1Data(float yValues) {
-        addEntry(mLineData, mLineChart, yValues, LINE_NUMBER_1);
+                addEntry(mLineData, mLineChart, yValues, LINE_NUMBER_1);
         }
 
         /**
          * 功能：第2条折线添加一个点
          */
         public void addLine2Data(float yValues) {
-        addEntry(mLineData, mLineChart, yValues, LINE_NUMBER_2);
+                addEntry(mLineData, mLineChart, yValues, LINE_NUMBER_2);
         }
 
         /**
          * 功能：第3条折线添加一个点
          */
         public void addLine3Data(float yValues) {
-        addEntry(mLineData, mLineChart, yValues, LINE_NUMBER_3);
+                addEntry(mLineData, mLineChart, yValues, LINE_NUMBER_3);
         }
 
         /**
          * 功能：发送开始
          */
         void sendStartAddEntry() {
-        if (!mDemoHandler.hasMessages(MSG_START)) { // 判断是否有消息队列此消息，如果没有则发送
-        mDemoHandler.sendEmptyMessageDelayed(MSG_START, 1000);
-        }
+                if (!mDemoHandler.hasMessages(MSG_START)) { // 判断是否有消息队列此消息，如果没有则发送
+                        mDemoHandler.sendEmptyMessageDelayed(MSG_START, 1000);
+                }
         }
 
         /**
          * 功能：暂停添加点，即移除所有消息
          */
         void sendPauseAddEntry() {
-        mDemoHandler.removeCallbacksAndMessages(null);
+                mDemoHandler.removeCallbacksAndMessages(null);
         }
 
         @Override
         protected void onDestroy() {
-        super.onDestroy();
-        // 清空消息
-        mDemoHandler.removeCallbacksAndMessages(null);
-        mDemoHandler = null;
+                super.onDestroy();
+                // 清空消息
+                mDemoHandler.removeCallbacksAndMessages(null);
+                mDemoHandler = null;
 
-        // moveViewToAnimated 移动到某个点，有内存泄漏，暂未修复，希望网友可以指着
-        mLineChart.clearAllViewportJobs();
-        mLineChart.removeAllViewsInLayout();
-        mLineChart.removeAllViews();
+                // moveViewToAnimated 移动到某个点，有内存泄漏，暂未修复，希望网友可以指着
+                mLineChart.clearAllViewportJobs();
+                mLineChart.removeAllViewsInLayout();
+                mLineChart.removeAllViews();
         }
-
 
 
         @Override
         public void onClick(View view) {
-        switch (view.getId()) {
-        case R.id.demo_start:
-        sendStartAddEntry();
-        break;
-        case R.id.demo_pause:
-        sendPauseAddEntry();
-        break;
-        case R.id.demo_checkbox1:
-        showLine(LINE_NUMBER_1);
-        break;
-        case R.id.demo_checkbox2:
-        showLine(LINE_NUMBER_2);
-        break;
-        case R.id.demo_checkbox3:
-        showLine(LINE_NUMBER_3);
-        break;
-        default:
+                switch (view.getId()) {
+                        case R.id.demo_start:
+                                sendStartAddEntry();
+                                break;
+                        case R.id.demo_pause:
+                                sendPauseAddEntry();
+                                break;
+                        case R.id.demo_checkbox1:
+                                showLine(LINE_NUMBER_1);
+                                break;
+                        case R.id.demo_checkbox2:
+                                showLine(LINE_NUMBER_2);
+                                break;
+                        case R.id.demo_checkbox3:
+                                showLine(LINE_NUMBER_3);
+                                break;
+                        default:
+                }
         }
-        }
-
 
 
         /**
          * 功能：自定义Handler，通过弱引用的方式防止内存泄漏
          */
-        private  static class DemoHandler extends Handler {
+        private static class DemoHandler extends Handler {
 
-        WeakReference<DataChartActivity2> mReference;
+                WeakReference<DataChartActivity2> mReference;
 
-        DemoHandler(DataChartActivity2 activity) {
-        mReference = new WeakReference<>(activity);
-        }
+                DemoHandler(DataChartActivity2 activity) {
+                        mReference = new WeakReference<>(activity);
+                }
 
 
-        @Override
-        public void handleMessage(Message msg) {
-        super.handleMessage(msg);
-        DataChartActivity2 lineChartDemo = mReference.get();
-        //lineChartDemo = initdata_MCU();
+                @Override
+                public void handleMessage(Message msg) {
+                        super.handleMessage(msg);
+                        DataChartActivity2 lineChartDemo = mReference.get();
+                        //lineChartDemo = initdata_MCU();
 
-        if (lineChartDemo == null) {
-        return;
+                        if (lineChartDemo == null) {
+                                return;
+                        }
+                        switch (msg.what) {
+                                case MSG_START:
+                                        if (!lineChartDemo.motorspeed.equals("")) {
+                                                lineChartDemo.addLine1Data(Float.parseFloat(lineChartDemo.motorspeed));
+                                        }
+                                        if (!lineChartDemo.motortorque.equals("")) {
+                                                lineChartDemo.addLine2Data(Float.parseFloat(lineChartDemo.motortorque));
+                                        }
+                                        if (!lineChartDemo.motortem.equals("")) {
+                                                lineChartDemo.addLine3Data(Float.parseFloat(lineChartDemo.motortem));
+                                        }
+//                    lineChartDemo.addLine2Data(lineChartDemo.getRandom(10f));
+//                    lineChartDemo.addLine3Data(lineChartDemo.getRandom(20f));
+                                        lineChartDemo.sendStartAddEntry();
+                                        break;
+                                default:
+                        }
+                }
         }
-        switch (msg.what) {
-        case MSG_START:
-        //lineChartDemo.addLine1Data(Float.parseFloat(motorspeed););
-        lineChartDemo.addLine2Data(lineChartDemo.getRandom(10f));
-        lineChartDemo.addLine3Data(lineChartDemo.getRandom(20f));
-        lineChartDemo.sendStartAddEntry();
-        break;
-        default:
-        }
-        }
-        }
-        }
+}
