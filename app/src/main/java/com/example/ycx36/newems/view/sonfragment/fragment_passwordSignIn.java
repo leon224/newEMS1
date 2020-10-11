@@ -12,11 +12,9 @@ import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.Toast;
 
-
 import com.example.ycx36.newems.R;
 import com.example.ycx36.newems.util.getCarAllBean;
 import com.example.ycx36.newems.util.interface_retrofit;
-import com.example.ycx36.newems.util.loginBean;
 import com.example.ycx36.newems.util.requestGetCarAllBean;
 import com.example.ycx36.newems.view.activity.activity_Register;
 
@@ -79,7 +77,7 @@ public class fragment_passwordSignIn extends Fragment {
             requestGetCarAll.getRequest().getContent().setPhone("");    //设置手机号
 
             Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl("http://120.79.62.86:10003/")
+                    .baseUrl("http://101.132.137.176:10003/")
                     .addConverterFactory(GsonConverterFactory.create())//设置 Json 转换器
                     .addCallAdapterFactory(RxJavaCallAdapterFactory.create())//RxJava 适配器
                     .build();
